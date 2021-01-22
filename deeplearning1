@@ -1,0 +1,36 @@
+import tensorflow as tf
+hello = tf.constant ("Hello, Tensorflow!")   #노드설정.
+
+sess = tf.Session()        #tensorflow1에서는 필수
+
+print(sess.run(hello))   
+
+==>b'Hello, TensorFlow!'
+
+---------------------------------------------------------------------------------------
+
+node1 = tf.constant(3.0, tf.float32)                # float32 형태의 상수 3.0을 노드 node1에 설정.
+node2 = tf.constant(4.0)
+node3 = tf.add(node1, node2)              
+
+# print("node1:", node1)                  ------->   node1은 노드일뿐이야 라고 오류뜸
+
+sess = tf.Session()
+print("sess.run(node1, node2): ", sess.run([node1, node2])
+print("sess.run(node3): ", sess.run(node3))
+
+==> sess.run(node1, node2): [3.0, 4.0]
+    sess.run(node3): 7.0
+    
+-----------------------------------------------------------------------------------------
+
+a = tf.placeholder(tf.float32)   # 상수가 아닌 float32 형태의 미지수를  a에 설정
+b = tf.placeholder(tf.float32)
+adder_node = a + b
+
+print(sess.run(adder_node, feed_dict={a: 3, b: 4.5}))    #빈a b에 3, 4.5를 각각 대입(feed_dict)
+print(sess.run(adder_node, feed_dict={a: [1,3], b= [2, 4]}))     #각각 1,3 2,4를 대입
+
+==> 7.5
+    [ 3.  7.]               # 1+2=3, 3+4=7
+         
