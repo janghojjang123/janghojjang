@@ -28,6 +28,8 @@ a = tf.placeholder(tf.float32)   # 상수가 아닌 float32 형태의 미지수�
 b = tf.placeholder(tf.float32)
 adder_node = a + b
 
+sess = tf.Session()
+
 print(sess.run(adder_node, feed_dict={a: 3, b: 4.5}))    #빈a b에 3, 4.5를 각각 대입(feed_dict)
 print(sess.run(adder_node, feed_dict={a: [1,3], b= [2, 4]}))     #각각 1,3 2,4를 대입
 
