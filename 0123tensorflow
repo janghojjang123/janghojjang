@@ -1,0 +1,77 @@
+import tensorflow as tf
+
+x_train = [1, 2, 3]
+
+y_train = [1, 2, 3]
+
+w = tf.Variable(tf.random_normal([1]), name='weight')
+b = tf.Variable(tf.random_normal([1]), name='bias')
+
+
+hypothesis = x_train * w + b
+
+cost = tf.reduce_mean(tf.square(hypothesis - y_train))             #reduce_mean 평균내기
+
+
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)        #아직모름.마법.
+train = optimizer.minimize(cost)
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())             #tf.Variable사용가능하게해줌
+
+ 
+
+for step in range(2001):
+
+    sess.run(train)                        #train자체(optimizer.minimize(cost))로는 못쓰는듯 반복문돌려줘야 최소화시키나봄
+
+    if step % 20 ==0:
+
+        print(step, sess.run(cost), sess.run(w), sess.run(b))
+
+-------------------------------------------------------------------
+
+빈깡통변수 이용
+
+ 
+
+w = tf.Variable(tf.random_normal([1]), name='weight')
+b = tf.Variable(tf.random_normal([1]), name='bias')
+
+X = tf.placeholder(tf.float32, shape=[None])            #none:1차원 array.여러개들어갈수있음.
+Y = tf.placeholder(tf.float32, shape=[None])
+
+ 
+
+hypothesis = X * w + b
+
+cost = tf.reduce_mean(tf.square(hypothesis - Y))
+
+ 
+
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
+train = optimizer.minimize(cost)
+
+ 
+
+sess = tf.Session()
+
+sess.run(tf.global_variables_initializer())
+
+ 
+
+for step in range(2001):
+
+    cost_val, w_val, b_val, _ = sess.run([cost, w, b, train],
+
+                feed_dict={X: [1, 2, 3, 4, 5], Y: [2.1, 3.1, 4.1, 5.1, 6.1]})                 #변수에 값입력. 
+
+    if step % 20 == 0:
+
+        print(step, cost_val, w_val, b_val, )
+
+ 
+
+print(sess.run(hypothesis,feed_dict={X:[5]}))         #완성된 w와 b로 만들어진 가설에 x:5대입-> [6.1002323]
+
+ 
