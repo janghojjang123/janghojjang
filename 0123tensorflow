@@ -10,7 +10,7 @@ b = tf.Variable(tf.random_normal([1]), name='bias')
 
 hypothesis = x_train * w + b
 
-cost = tf.reduce_mean(tf.square(hypothesis - y_train))             #reduce_mean 평균내기
+cost = tf.reduce_mean(tf.square(hypothesis - y_train))             #reduce_mean 평균내기 
 
 
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)        #아직모름.마법.
@@ -23,7 +23,7 @@ sess.run(tf.global_variables_initializer())             #tf.Variable사용가능
 
 for step in range(2001):
 
-    sess.run(train)                        #train자체(optimizer.minimize(cost))로는 못쓰는듯 반복문돌려줘야 최소화시키나봄
+    sess.run(train)                      
 
     if step % 20 ==0:
 
@@ -74,4 +74,75 @@ for step in range(2001):
 
 print(sess.run(hypothesis,feed_dict={X:[5]}))         #완성된 w와 b로 만들어진 가설에 x:5대입-> [6.1002323]
 
- 
+ ----------------------------------------
+#cost 함수그래프그리기
+
+import tensorflow as tf
+import matplotlib.pyplot as plt                          
+
+X = [1, 2, 3]
+Y = [1, 2, 3]
+
+W = tf.placeholder(tf.float32)
+hypothesis = X * W
+cost = tf.reduce_mean(tf.square(hypothesis - Y))
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+
+W_val = []
+cost_val = []
+
+for i in range(-30, 50):
+    feed_W = i * 0.1
+    curr_cost, curr_W = sess.run([cost, W], feed_dict={W: feed_W})
+    W_val.append(curr_W)
+    cost_val.append(curr_cost)
+    
+plt.plot(W_val, cost_val)
+plt.show()                 #그래프보여주기.
+----------------------------------------------------------------------------
+
+import tensorflow as tf
+
+X = [1, 2, 3]
+Y = [1, 2, 3]
+
+W = tf.Variable(-3.0)                                
+
+hypothesis = X * W
+
+cost = tf.reduce_mean(tf.square(hypothesis - Y))
+
+optimizer = tf.train.GradientDescentOptimizer(learning_rate = 0.1)  #미분,계산안하고알아서해줌
+train = optimizer.minimize(cost)
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+
+for step in range(11):
+    print(step, sess.run(W))
+    sess.run(train)
+-----------------------------------------------
+import tensorflow as tf
+x_data = [1, 2, 3]
+y_data = [1, 2, 3]
+
+W = tf.Variable(tf.random_normal([1]), name='weight')
+X = tf.placeholder(tf.float32)
+Y = tf.placeholder(tf.float32)
+
+hypothesis = X * W
+
+cost = tf.reduce_sum(tf.square(hypothesis - Y))
+
+learning_rate = 0.1                                                 # Gredient descent argorithm 
+gradient = tf.reduce_sum((W * X - Y) * X)
+descent = W - learning_rate * gradient
+update = W.assign(descent)
+sess = tf.Session()
+
+sess.run(tf.global_variables_initializer())
+for step in range(21):
+    sess.run(update, feed_dict={X: x_data, Y: y_data})
+    print(step, sess.run(cost, feed_dict={X: x_data, Y: y_data}), sess.run(W))
