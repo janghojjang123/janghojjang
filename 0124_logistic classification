@@ -62,5 +62,6 @@ with tf.Session() as sess:
         if step % 1000 == 0:
             print(step, sess.run(cost, feed_dict=feed))
 
-    h, c, a = sess.run([hypothesis, predicted, accuracy], feed_dict=feed)
-    print("\nHypothesis: ", h, "\nCorrect (Y): ", c, "\nAccuracy: ", a)
+        h, c, a = sess.run([hypothesis, predicted, accuracy], feed_dict=feed) 
+        print("\nHypothesis: ", h, "\nCorrect (Y): ", c, "\nAccuracy: ", a)    #hypothesis,predicted 한줄마다 하나씩, accuracy는 한턴에 하나씩.
+        
