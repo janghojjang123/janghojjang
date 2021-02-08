@@ -63,17 +63,17 @@ for step in range(2001):
     if step % 10 == 0:
         print(step, "coooost:", cost_val, "\nprediction:\n", hy_val
  ================================================
- #데이터양많을때는 QueueRunners 이용
+ #데이터양많을때는 QueueRunners 이용. 필요할때마다 batch해오기 때문에 데이터저장공간 절약!
  
 import tensorflow as tf
 
 filename_queue = tf.train.string_input_producer(
     ['jangho.csv'], shuffle=False, name='filename_queue')      #여러파일들집합에 filename설정
 
-reader = tf.TextLineReader()
+reader = tf.TextLineReader()                   #파일 읽어올 reader설정. 이건 textline리더임.
 key, value = reader.read(filename_queue)       #파일집합에서 key, value 읽어오기.
 
-       #그리고 각각데이터타입은이럼.
+       
 record_defaults = [[0.], [0.], [0.], [0.]]                #그리고 각각데이터타입은이럼.
 xy = tf.decode_csv(value, record_defaults = record_defaults)        #value를 csv로디코드 
                                                            
