@@ -26,4 +26,14 @@ with tf.Session() as sess:
     a = sess.run(hypothesis, feed_dict={X: [[1, 11, 7, 9]]})
     print( a, sess.run(tf.arg_max(a, 1)))            #a중에 1빠따로 높은 숫자의 array출력
     
+    =====================================================================================
+logits = tf.matmul(X, W) + b
+
+hypothesis = tf.nn.softmax(logits)
+cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
+
+#=크로스_엔트로피 함수가 제공됨. 편리하게 가능.
+
+cost_i = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=Y_one_hot)
+cost = tf.reduce_mean(cost_i)
         
