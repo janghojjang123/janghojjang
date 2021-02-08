@@ -137,12 +137,13 @@ hypothesis = X * W
 cost = tf.reduce_sum(tf.square(hypothesis - Y))
 
 learning_rate = 0.1                                                 # Gredient descent argorithm 
-gradient = tf.reduce_sum((W * X - Y) * X)
+gradient = tf.reduce_mean((W * X - Y) * X)                          #sum아니고 mean임.
 descent = W - learning_rate * gradient
-update = W.assign(descent)
-sess = tf.Session()
+update = W.assign(descent)                                          #assign 함수를 이용하여 W에 할당하는 update
 
+sess = tf.Session()
 sess.run(tf.global_variables_initializer())
+
 for step in range(21):
     sess.run(update, feed_dict={X: x_data, Y: y_data})
     print(step, sess.run(cost, feed_dict={X: x_data, Y: y_data}), sess.run(W))
