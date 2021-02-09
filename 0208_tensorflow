@@ -12,7 +12,7 @@ b = tf.Variable(tf.random_normal([nb_classes]), name='bias')
 
 hypothesis = tf.nn.softmax(tf.matmul(X, W) + b)
 
-cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))
+cost = tf.reduce_mean(-tf.reduce_sum(Y * tf.log(hypothesis), axis=1))   #axis=1은 matmul이 아니고 같은 element의 곱을 의미=element wise
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
 
 with tf.Session() as sess:
@@ -44,12 +44,12 @@ xy = np.loadtxt('data-04-zoo.csv', delimiter=',', dtype=np.float32)
 x_data = xy[:, 0:-1]
 y_data = xy[:, [-1]]
 
-nb_classes = 7
+nb_classes = 7                                     #0~6 총 7개의 one-hot 가짓수.
 
 X = tf.placeholder(tf.float32, [None, 16])
 Y = tf.placeholder(tf.int32, [None, 1])
 
-Y_one_hot = tf.one_hot(Y, nb_classes)             #onehotencoding 대신에 차원이하나 추가
+Y_one_hot = tf.one_hot(Y, nb_classes)              #onehotencoding 대신에 차원이하나 추가
 Y_one_hot = tf.reshape(Y_one_hot, [-1,nb_classes]) #reshape=>차원 낮추기
 
 W = tf.Variable(tf.random_normal([16, nb_classes]), name='weight')
@@ -63,7 +63,7 @@ cost_i = tf.nn.softmax_cross_entropy_with_logits(logits=logits,
 cost = tf.reduce_mean(cost_i)
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
 
-prediction = tf.argmax(hypothesis, 1)
+prediction = tf.argmax(hypothesis, 1)                               #[[0.7],[0.2],[0.1]]--->0반납.
 correct_prediction = tf.equal(prediction, tf.argmax(Y_one_hot, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))  #cast함수:true이면1, false이면0
 
